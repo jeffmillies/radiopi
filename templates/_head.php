@@ -45,6 +45,6 @@ if (empty($current)) {
             <?php } ?>
         </div>
         <div class=" bg-secondary text-white" style="min-height: 50px; padding-left: 85px; padding-top: 15px;">
-            <span style="font-size: 1.2em"><?php echo $current; ?></span> <br>Current cold bootup time 1:09
+            <span style="font-size: 1.2em"><?php echo $current; ?></span>
         </div>
         <div style="margin-top: 25px">
