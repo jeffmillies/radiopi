@@ -1,5 +1,5 @@
 #!/bin/sh
-echo "
+echo "\033[0;37m
 =================================================================
 \033[0;32m
     .~~.   .~~.
@@ -13,28 +13,50 @@ echo "
     '~ .~~~. ~'
         '~' \033[0;37m
 =================================================================";
-echo "\033[0;31m === Updating/Upgrading Apt === \033[0;37m";
-apt-get update && apt-get upgrade -y;
+echo "
+Welcome to RadioPi's Installation script!
 
-echo "\033[0;31m === Setting Hostname to 'radiopi' === \033[0;37m";
-sed -i 's/raspberrypi/radiopi/g' /etc/hosts;
-sed -i 's/raspberrypi/radiopi/g' /etc/hostname;
+This will update apt and install any software required. (mpd mpc apache2 php php-curl php-dom)
+It will then download the files needed, delete the contents of /var/www and place them there.
+There will be some small permission updates on files to allow apache to update a config file
+and for apache to save radio files.
 
-echo "\033[0;31m === Installing MPD MPC (Radio Player) and Apache2/PHP === \033[0;37m";
-apt-get install unzip mpd mpc apache2 php php-curl php-dom -y;
-systemctl enable mpd;
-systemctl start mpd;
+After everything is done, it will reboot the raspberrypi for all the changes to take effect.
 
-echo "\033[0;31m === Updating directory === \033[0;37m";
-chown -R pi:root /var/www;
-wget https://github.com/jeffmillies/radiopi/archive/master.zip -P /tmp;
-rm -rf /var/www/*;
-unzip /tmp/master.zip -d /tmp;
-rsync -av /tmp/radiopi-master/ /var/www/;
-rm -rf /tmp/radiopi-master;
-rm -rf /tmp/master.zip;
+If you don't want these changes please answer 'n' to quit the installer
+";
+echo -n "\033[0;31mInstall RadioPi? (y/n): \033[0;37m";
+read answer
+if echo "$answer" | grep -iq "^y" ;then
+    echo "\033[0;31m === Updating/Upgrading Apt === \033[0;37m";
+    apt-get update && apt-get upgrade -y;
+
+    echo "\033[0;31m === Setting Hostname to 'radiopi' === \033[0;37m";
+    sed -i 's/raspberrypi/radiopi/g' /etc/hosts;
+    sed -i 's/raspberrypi/radiopi/g' /etc/hostname;
+
+    echo "\033[0;31m === Installing MPD MPC (Radio Player) and Apache2/PHP === \033[0;37m";
+    apt-get install mpd mpc apache2 php php-curl php-dom -y;
+    systemctl enable mpd;
+    systemctl start mpd;
+
+    echo "\033[0;31m === Updating directory === \033[0;37m";
+    chown -R pi:root /var/www;
+    wget https://github.com/jeffmillies/radiopi/archive/master.zip -P /tmp;
+    rm -rf /var/www/*;
+    unzip /tmp/master.zip -d /tmp;
+    rsync -av /tmp/radiopi-master/ /var/www/;
+    rm -rf /tmp/radiopi-master;
+    rm -rf /tmp/master.zip;
 
 
-chown mpd:www-data /var/lib/mpd/playlists;
-chown www-data:root /var/www/lib/radiopi.json;
-chmod -R g+rw /var/lib/mpd/playlists;
+    chown mpd:www-data /var/lib/mpd/playlists;
+    chown www-data:root /var/www/lib/radiopi.json;
+    chmod -R g+rw /var/lib/mpd/playlists;
+
+    echo "\033[0;31m === Rebooting now === \033[0;37m";
+    reboot now;
+else
+    echo "Bye!"
+fi
+
