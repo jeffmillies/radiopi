@@ -7,7 +7,7 @@ Simple streaming radio powered by RaspberryPi and PHP
 
 Example: /boot/wpa_supplicant.conf
 
-    ```
+```
     ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
     update_config=1
     country=«your_ISO-3166-1_two-letter_country_code»
@@ -25,7 +25,7 @@ Example: /boot/wpa_supplicant.conf
         key_mgmt=WPA-PSK
         id_str="«your_second_unique_name»"
     }
-    ```
+```
  
 Replace «your_ISO-3166-1_two-letter_country_code» with your [ISO Country Code](https://www.iso.org/obp/ui/#search/code/) (such as CA for Canada), 
 «your_SSID» with your wireless access point name and 
