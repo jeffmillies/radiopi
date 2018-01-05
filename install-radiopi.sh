@@ -22,6 +22,8 @@ sed -i 's/raspberrypi/radiopi/g' /etc/hostname;
 
 echo "\033[0;31m === Installing MPD MPC (Radio Player) and Apache2/PHP === \033[0;37m";
 apt-get install unzip mpd mpc apache2 php php-curl php-dom -y;
+systemctl enable mpd;
+systemctl start mpd;
 
 echo "\033[0;31m === Updating directory === \033[0;37m";
 chown -R pi:root /var/www;
