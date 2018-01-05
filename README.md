@@ -33,6 +33,11 @@ Replace «your_ISO-3166-1_two-letter_country_code» with your [ISO Country Code]
 «your_unique_name» should be used if you're going to list more than 1 network, this will let the Raspberry Pi join the available network.
  
  
-4) Create ssh file in boot (touch /boot/ssh - no extension)
+4) Create ssh file in boot. `touch {mount}/boot/ssh`
 5) SSH into your RaspberryPi, your IP should be shown above the login prompt.
-6) Update your password for pi, passwd.
+6) Update your password for pi. `passwd`
+5) Download the installer. `wget https://raw.githubusercontent.com/jeffmillies/radiopi/master/install-radiopi.sh`
+6) Make it executable. `chmod +x install-radiopi.sh`
+7) Run! `sudo ./install-radiopi.sh`
+
+After Rebooting you will be able to view and control [RadioPi](http://radiopi/) as long as you are connected to the same network.
