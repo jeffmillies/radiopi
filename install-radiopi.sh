@@ -41,7 +41,7 @@ if echo "$answer" | grep -iq "^y" ;then
     sleep 3;
     sed -i 's/raspberrypi/radiopi/g' /etc/hosts;
     sed -i 's/raspberrypi/radiopi/g' /etc/hostname;
-    echo "\e[0;32mDone \e[0;40m";
+    echo "\e[0;34mDone \e[0;40m";
 
     echo "\e[0;31m === Updating .bashrc === \e[0;40m";
     sleep 3;
@@ -55,7 +55,7 @@ if echo "$answer" | grep -iq "^y" ;then
     fi
     sed -i "s/#alias ll='ls -l'/alias ll='ls -al'/g" /home/pi/.bashrc;
     echo "$(cat /home/pi/.bashrc) \necho -e \"$LOGO\"" > /home/pi/.bashrc
-    echo "\e[0;32mDone \e[0;40m";
+    echo "\e[0;34mDone \e[0;40m";
 
     echo "\e[0;31m === Updating/Upgrading Apt === \e[0;40m";
     apt-get update && apt-get upgrade -y;
@@ -66,7 +66,7 @@ if echo "$answer" | grep -iq "^y" ;then
     apt-get install mpd mpc apache2 php php-curl php-dom -y;
     systemctl enable mpd;
     systemctl start mpd;
-    echo "\e[0;32mDone \e[0;40m";
+    echo "\e[0;34mDone \e[0;40m";
 
     echo "\e[0;31m === Downloading RadioPi === \e[0;40m";
     sleep 5;
@@ -77,14 +77,14 @@ if echo "$answer" | grep -iq "^y" ;then
     rsync -av /tmp/radiopi-master/ /var/www/;
     rm -rf /tmp/radiopi-master;
     rm -rf /tmp/master.zip;
-    echo "\e[0;32mDone \e[0;40m";
+    echo "\e[0;34mDone \e[0;40m";
 
     echo "\e[0;31m === Updating directories === \e[0;40m";
     sleep 5;
     chown mpd:www-data /var/lib/mpd/playlists;
     chown www-data:root /var/www/lib/radiopi.json;
     chmod -R g+rw /var/lib/mpd/playlists;
-    echo "\e[0;32mDone \e[0;40m";
+    echo "\e[0;34mDone \e[0;40m";
 
     echo "\e[0;31m === Rebooting now === \e[0;40m";
     echo "\e[0;31mBRB! \e[0;40m";
