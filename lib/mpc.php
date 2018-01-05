@@ -38,6 +38,7 @@ class mpc {
             shell_exec("mpc load {$station}");
         }
         shell_exec("mpc play");
+        shell_exec("mpc volume 100");
         sleep(1);
         return self::current();
     }
