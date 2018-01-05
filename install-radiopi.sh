@@ -44,8 +44,14 @@ if echo "$answer" | grep -iq "^y" ;then
     sleep 3;
     sed -i 's/raspberrypi/radiopi/g' /etc/hosts;
     sed -i 's/raspberrypi/radiopi/g' /etc/hostname;
-    cp -rf /home/pi/.bashrc /home/pi/.bashrc.bak
-    chown pi:pi /home/pi/.bashrc.bak
+    if [ -e /home/pi/.bashrc.bak ]
+    then
+        cp -rf /home/pi/.bashrc.bak /home/pi/.bashrc
+        chown pi:pi /home/pi/.bashrc
+    else
+        cp -rf /home/pi/.bashrc /home/pi/.bashrc.bak
+        chown pi:pi /home/pi/.bashrc.bak
+    fi
     sed -i "s/#alias ll='ls -l'/alias ll='ls -al'/g" /home/pi/.bashrc;
     echo "$(cat /home/pi/.bashrc) \necho -e \"$LOGO\"" > /home/pi/.bashrc
     echo "done";
