@@ -39,12 +39,14 @@ if (empty($current)) {
     </div>
     <div class="" style="width: 100%; position: absolute; top: 40px; left: 0; overflow: auto;">
         <div class=" bg-secondary text-white" style="height: 1px;">
-            <?php if ($current != 'RadioPi not playing') { ?>
-                <span class="ajax btn btn-danger btn-circle btn-xl " data-command="stop" style="margin: 0 5px;"><span
+            <div id="current-button" <?php if ($current == 'RadioPi not playing') { ?> style="display: none;" <?php } ?>>
+                <span id="stop-station" class="ajax btn btn-danger btn-circle btn-xl " data-command="stop"
+                      style="margin: 0 5px;"><span
                             class="fa fa-stop"></span></span>
-            <?php } ?>
+            </div>
         </div>
-        <div class=" bg-secondary text-white" style="min-height: 50px; padding-left: 85px; padding-top: 15px;">
+        <div id="current-title" class=" bg-secondary text-white"
+             style="min-height: 50px; padding-left: 85px; padding-top: 15px;">
             <span style="font-size: 1.2em"><?php echo $current; ?></span>
         </div>
         <div style="margin-top: 25px">

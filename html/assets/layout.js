@@ -1,6 +1,7 @@
 var loadingHtml = '<div class="fa-3x text-center" style="padding-top: 50px;"><span class="fa fa-spin fa-circle-o-notch"></span></div>';
 
 function formatStationList(records) {
+
     var html = '';
     for (var i = 0; i < records.length; i++) {
         var row = records[i];
@@ -36,7 +37,8 @@ $(document).ready(function () {
                 command: 'search',
                 id: _this.val()
             }).done(function (result) {
-                $('#stations').html(formatStationList(result.data));
+                console.log('using html');
+                $('#stations').html(result['html']);
             });
         }, 750);
     });
@@ -51,6 +53,34 @@ $(document).ready(function () {
         });
     });
 
+    $(document).on('click', '.listen-station', function () {
+        var _this = $(this);
+        $('.listen-station').each(function () {
+            $(this).html('Listen').removeAttr('disabled');
+        });
+        ajax.get({
+            command: 'listen',
+            id: $('#' + _this.attr('data-station-id')).html()
+        }).done(function (result) {
+            $('#current-title').html(result['data']);
+            $('#current-button').show();
+            _this.html('Listening').attr('disabled', true);
+        });
+    });
+
+    $(document).on('click', '#stop-station', function () {
+        var _this = $(this);
+        $('.listen-station').each(function () {
+            $(this).html('Listen').removeAttr('disabled');
+        });
+        ajax.get({
+            command: 'stop'
+        }).done(function (result) {
+            $('#current-title').html('RadioPi not playing');
+            $('#current-button').hide();
+        });
+    });
+
     $(document).on('change', '.station', function () {
         var _this = $(this);
         $('#stations').html(loadingHtml);
@@ -58,7 +88,8 @@ $(document).ready(function () {
             command: 'stations',
             id: _this.val()
         }).done(function (result) {
-            $('#stations').html(formatStationList(result.data));
+            console.log('using html');
+            $('#stations').html(result['html']);
         });
     });
 

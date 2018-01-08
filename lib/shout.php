@@ -78,21 +78,8 @@ class shout {
     }
 
     static function getStationM3u($station) {
-        $key = 'channel_list';
         $m3u = self::curl('GET', "http://yp.shoutcast.com/sbin/tunein-station.m3u", ['id' => $station['ID']]);
         file_put_contents(mpc::$loc['playlist'] . "{$station['ID']}.m3u", $m3u);
-        $channels = cache::get($key);
-        $addChannel = true;
-        foreach ($channels as $channel) {
-            if ($channel['ID'] == $station['ID']) {
-                $addChannel = false;
-            }
-        }
-        if ($addChannel) {
-            $channels[] = $station;
-            cache::set($key, $channels);
-            cache::set('write_cache', true);
-        }
         return ['name' => $station['ID'], 'content' => utf8_encode($m3u)];
     }
 
@@ -107,6 +94,22 @@ class shout {
         $key = 'channel_list';
         $channels = cache::get($key);
         return $channels;
+    }
+
+    static function saveChannel($station) {
+        $key = 'channel_list';
+        $channels = cache::get($key);
+        $addChannel = true;
+        foreach ($channels as $channel) {
+            if ($channel['ID'] == $station['ID']) {
+                $addChannel = false;
+            }
+        }
+        if ($addChannel) {
+            $channels[] = $station;
+            cache::set($key, $channels);
+            cache::set('write_cache', true);
+        }
     }
 
     static function addSavedChannel($station) {

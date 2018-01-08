@@ -2,7 +2,7 @@
 
 class file {
     static $config = [
-        'genre_list', 'channel_list'
+        'genre_list', 'channel_list', 'channel_current'
     ];
 
     static function base() {
@@ -15,6 +15,14 @@ class file {
 
     static function config() {
         return self::base() . "/lib/radiopi.json";
+    }
+
+    static function capture($file, $data) {
+        ob_start();
+        include(self::base() . "/templates/" . $file);
+        $contents = ob_get_contents();
+        ob_end_clean();
+        return trim($contents);
     }
 
     static function getConfig() {
