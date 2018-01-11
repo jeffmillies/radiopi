@@ -18,7 +18,10 @@ $current = cache::get('channel_current');
                         <span class="h3"><?php echo $channel['Name']; ?></span>
                         <div class="row text-muted">
                             <div class="col-md-6"><?php echo $channel['Genre']; ?> </div>
-                            <div class="col-md-6 text-right"> <?php echo $channel['Bitrate']; ?>kb/s
+                            <div class="col-md-6 text-right">
+                                <?php if (!empty($channel['Bitrate'])) { ?>
+                                    <?php echo $channel['Bitrate']; ?>kb/s
+                                <?php } ?>
                                 <small><span class="ajax btn btn-outline-danger" data-command="delete"
                                              data-id="<?php echo $channel['ID']; ?>">Delete</span></small>
                             </div>
