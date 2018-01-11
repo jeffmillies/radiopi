@@ -1,40 +1,13 @@
 <?php
 
 class shout {
-    static function curl($method = 'GET', $path = '', $params = []) {
-        $query = http_build_query($params);
-        $ch = curl_init();
-        if ($method == 'GET') {
-            $path .= "?" . $query;
-        }
-        $url = $path;
-        curl_setopt($ch, CURLOPT_URL, $url);
-        if ($method == 'POST') {
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($params));
-            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/x-www-form-urlencoded']);
-        }
-        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 6.1; rv:8.0) Gecko/20100101 Firefox/8.0');
-        curl_setopt($ch, CURLOPT_HEADER, 0);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 120);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 120);
-        curl_setopt($ch, CURLOPT_MAXREDIRS, 10);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $server_output = curl_exec($ch);
-
-        curl_close($ch);
-        return $server_output;
-    }
 
     static function getGenreList() {
         $key = 'genre_list';
         $data = cache::get($key);
         if (empty($data)) {
-            $data = self::domGenreList(self::curl('GET', 'https://shoutcast.com/'));
+            $data = self::domGenreList(curl::get('https://shoutcast.com/'));
             cache::set($key, $data);
-            cache::set('write_cache', true);
         }
         return $data;
     }
@@ -44,9 +17,8 @@ class shout {
         $key = 'station_list_' . str_replace(' ', '', $genre);
         $data = cache::get($key);
         if (empty($data)) {
-            $data = json_decode(self::curl('POST', 'https://shoutcast.com/Home/BrowseByGenre', ['genrename' => $genre]), true);
+            $data = json_decode(curl::post('https://shoutcast.com/Home/BrowseByGenre', ['genrename' => $genre]), true);
             cache::set($key, $data);
-            cache::set('write_cache', true);
         }
         $channelIds = [];
         foreach ($channels as $channel) {
@@ -62,7 +34,7 @@ class shout {
     }
 
     static function searchStations($search) {
-        $data = json_decode(self::curl('POST', 'https://shoutcast.com/Search/UpdateSearch', ['query' => $search]), true);
+        $data = json_decode(curl::post('https://shoutcast.com/Search/UpdateSearch', ['query' => $search]), true);
         $key = 'channel_list';
         $channels = cache::get($key);
         $channelIds = [];
@@ -78,7 +50,7 @@ class shout {
     }
 
     static function getStationM3u($station) {
-        $m3u = self::curl('GET', "http://yp.shoutcast.com/sbin/tunein-station.m3u", ['id' => $station['ID']]);
+        $m3u = curl::get("http://yp.shoutcast.com/sbin/tunein-station.m3u", ['id' => $station['ID']]);
         file_put_contents(mpc::$loc['playlist'] . "{$station['ID']}.m3u", $m3u);
         return ['name' => $station['ID'], 'content' => utf8_encode($m3u)];
     }
@@ -86,7 +58,6 @@ class shout {
     static function deleteStationM3u($id) {
         unlink(mpc::$loc['playlist'] . $id . ".m3u");
         mpc::playlists();
-        cache::set('write_cache', true);
         return true;
     }
 
@@ -108,7 +79,6 @@ class shout {
         if ($addChannel) {
             $channels[] = $station;
             cache::set($key, $channels);
-            cache::set('write_cache', true);
         }
     }
 

@@ -26,7 +26,6 @@ if (isset($request['command'])) {
     foreach (glob("$basedir/lib/*.php") as $filename) {
         include $filename;
     }
-    cache::set('write_cache', false);
 
     switch ($request['command']) {
         case 'channels':
@@ -35,12 +34,10 @@ if (isset($request['command'])) {
         case 'play':
             $result['data'] = mpc::play((isset($request['id']) ? $request['id'] : null));
             cache::set('channel_current', mpc::playlist($request['id']));
-            cache::set('write_cache', true);
             break;
         case 'stop':
             $result['data'] = mpc::stop();
             cache::set('channel_current', []);
-            cache::set('write_cache', true);
             break;
         case 'next':
             break;
@@ -57,22 +54,31 @@ if (isset($request['command'])) {
             $result['data'] = shout::searchStations($request['id']);
             $result['html'] = file::capture('results.php', $result['data']);
             break;
+        case 'save-url':
+            $station = [
+                'ID' => time(),
+                'Name' => $request['name'],
+                'Bitrate' => $request['bitrate'],
+                'Genre' => $request['genre'],
+            ];
+            $m3u = curl::get($request['url']);
+            file_put_contents(mpc::$loc['playlist'] . "{$station['ID']}.m3u", $m3u);
+            $result['data'] = ['name' => $station['ID'], 'content' => utf8_encode($m3u)];
+            shout::saveChannel($station);
+            break;
         case 'save':
             $station = json_decode($request['id'], true);
             $result['data'] = shout::getStationM3u($station);
             shout::saveChannel($station);
-            cache::set('write_cache', true);
             break;
         case 'listen':
             $station = json_decode($request['id'], true);
             shout::getStationM3u($station);
             $result['data'] = mpc::play($station['ID']);
             cache::set('channel_current', $station);
-            cache::set('write_cache', true);
             break;
         case 'delete':
             $result['data'] = shout::deleteStationM3u($request['id']);
-            cache::set('write_cache', true);
             break;
         default:
             $result = [
@@ -82,7 +88,7 @@ if (isset($request['command'])) {
             ];
             break;
     }
-    if (cache::get('write_cache')) {
+    if (!empty(cache::write())) {
         file::setConfig();
     }
 }

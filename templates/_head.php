@@ -34,7 +34,11 @@ if (empty($current)) {
             <a href="/"><img src="assets/radiopi_sm.png"> <span>RadioPi</span></a>
         </div>
         <div style="position: absolute; top: 8px; right: 5px;">
-            <small><a href="/?search"><span class="btn btn-outline-success">Search</span></a></small>
+            <small>
+
+                <a href="/?add"><span class="btn btn-outline-info">Add URL</span></a>
+                <a href="/?search"><span class="btn btn-outline-success">Search</span></a>
+            </small>
         </div>
     </div>
     <div class="" style="width: 100%; position: absolute; top: 40px; left: 0; overflow: auto;">

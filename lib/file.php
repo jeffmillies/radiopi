@@ -36,11 +36,21 @@ class file {
 
     static function setConfig() {
         $config = [];
-        foreach (self::$config as $key) {
+        foreach (cache::write() as $key) {
             $config[$key] = cache::get($key);
         }
-        return file_put_contents(self::config(),
+        if (cache::isLoaded() === false) {
+            cache::loadConfig();
+        }
+        foreach (self::$config as $key) {
+            if (!isset($config[$key])) {
+                $config[$key] = cache::get($key);
+            }
+        }
+        $result = file_put_contents(self::config(),
             json_encode($config)
         );
+        cache::loadConfig();
+        return $result;
     }
 }

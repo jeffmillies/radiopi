@@ -10,14 +10,18 @@ foreach (glob("$basedir/lib/*.php") as $filename) {
 }
 cache::loadConfig();
 
-include "{$basedir}/templates/_head.php";
+$page = 'home.php';
 
 if (isset($_REQUEST['search'])) {
-    include "{$basedir}/templates/search.php";
-} else {
-    include "{$basedir}/templates/home.php";
+    $page = 'search.php';
+}
+if (isset($_REQUEST['add'])) {
+    $page = 'add.php';
 }
 
+
+include "{$basedir}/templates/_head.php";
+include "{$basedir}/templates/{$page}";
 include "{$basedir}/templates/_foot.php";
 
 file::setConfig();
