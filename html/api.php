@@ -56,7 +56,7 @@ if (isset($request['command'])) {
             break;
         case 'save-url':
             $station = [
-                'ID' => time(),
+                'ID' => uniqid(),
                 'Name' => $request['name'],
                 'Bitrate' => $request['bitrate'],
                 'Genre' => $request['genre'],
