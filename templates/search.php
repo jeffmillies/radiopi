@@ -2,8 +2,14 @@
 $genres = shout::getGenreList();
 ?>
 <div class="container-fluid">
+    <div class="row" style="margin-top: 10px;">
+        <div class="col-md-12">
+            <small class="text-muted">Station list and Search powered by <a href="http://shoutcast.com/Search"
+                                                                            target="_blank">Shoutcast</a></small>
+        </div>
+    </div>
     <div class="row">
-        <div class="col-md-6 col-sm-12" style="margin-top: 10px;">
+        <div class="col-md-6 col-sm-12">
         <span class="input-group">
             <select id="parent" class="station form-control">
                 <option></option>
@@ -28,7 +34,7 @@ $genres = shout::getGenreList();
             <?php } ?>
             </span>
         </div>
-        <div class="col-md-6 col-sm-12" style="margin-top: 10px;">
+        <div class="col-md-6 col-sm-12">
             <input id="search-station" type="text" class="form-control" placeholder="Search Stations">
         </div>
     </div>
