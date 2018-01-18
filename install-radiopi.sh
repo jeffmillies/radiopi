@@ -86,6 +86,16 @@ if echo "$answer" | grep -iq "^y" ;then
     chmod -R g+rw /var/lib/mpd/playlists;
     echo "\e[0;34mDone \e[0;40m";
 
+    echo "\e[0;31m === Adding cron for hosts file === \e[0;40m";
+
+    if ! grep -q "radiopi.cron" /etc/crontab
+    then
+        echo "# radiopi.cron" >> /etc/crontab
+        echo "* * * * * root /var/www/hosts-cron.sh > /tmp/radiopi.log 2>&1" >> /etc/crontab
+    fi
+    sleep 3;
+    echo "\e[0;34mDone \e[0;40m";
+
     echo "\e[0;31m === Rebooting now === \e[0;40m";
     echo "\e[0;31mBRB! \e[0;40m";
     sleep 3;
