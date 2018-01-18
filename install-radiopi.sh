@@ -87,7 +87,7 @@ if echo "$answer" | grep -iq "^y" ;then
     echo "\e[0;34mDone \e[0;40m";
 
     echo "\e[0;31m === Adding cron for hosts file === \e[0;40m";
-
+    chmod +x /var/www/hosts-cron.sh
     if ! grep -q "radiopi.cron" /etc/crontab
     then
         echo "# radiopi.cron" >> /etc/crontab

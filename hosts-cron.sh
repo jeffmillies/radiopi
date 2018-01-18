@@ -4,7 +4,7 @@ if [ `whoami` != root ]; then
   exit
 fi
 
-FILE=/var/www/development/hosts.txt
+FILE=/etc/hosts
 IP=$(hostname -I | head -n1 | cut -d " " -f1)
 
 if grep -q "radiopi.cron" ${FILE}
